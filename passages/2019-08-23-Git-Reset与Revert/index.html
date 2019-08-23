@@ -6,16 +6,16 @@
   <meta name="author" content="Ezio Xiang">
   
   
-  <title>标签: Git | Xiang&#39;s Blog</title>
+  <title>Git_Reset与Revert | Xiang&#39;s Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, Theme-AD, Ezio Xiang">
+    <meta name="keywords" content="Git,Git,工具,">
   
 
   
-  <meta name="description" content="X&#39;s Blog">
+  <meta name="description" content="Git Reset和Revert的用法与异同">
 
   
 
@@ -38,7 +38,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-08-22 ",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "Ezio Xiang",
     share: {"twitter":false,"facebook":false,"weibo":true,"qq":true,"wechat":true},
@@ -148,30 +148,77 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="timeline">
-  <h2 class="timeline-title">标签: Git</h2>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-08-23
+    </span>
+    
+      <span>
+        | <a href="/categories/Git/"><i class="fa fa-bookmark"></i>Git</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Git_Reset与Revert
+  </h1>
   
-    
-      <h3 class="timeline-subtitle">2019</h3>
-    
-    <div class="timeline-item">
-      <time>2019-08-23</time>
-      <a target="_self" href="/passages/2019-08-23-Git-Reset与Revert/">Git_Reset与Revert</a>
-    </div>
+  <article class="passage-article">
+    <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="Reset"><a href="#Reset" class="headerlink" title="Reset"></a>Reset</h2><p>恢复版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#master v1.0-&gt;v2.0-&gt;v3.0</span></span><br><span class="line">git <span class="built_in">log</span></span><br><span class="line"><span class="comment">#查找v2.0的hashID</span></span><br><span class="line">git reset &lt;版本hashID&gt;</span><br><span class="line"><span class="comment">#master v1.0-&gt;v2.0</span></span><br></pre></td></tr></table></figure>
+
+<p>git reset 参数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft &lt;版本hashID&gt;   <span class="comment">#回退版本库(commit提交的地方,暂存区的修改还在)</span></span><br><span class="line">git reset --mixed &lt;版本hashID&gt;  <span class="comment">#回退版本库，暂存区(add提交的地方)</span></span><br><span class="line">git reset --hard &lt;版本hashID&gt;   <span class="comment">#回退版本库，暂存区，工作区。(本地代码也撤回了!!)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>警告:谨慎使用参数–hard</strong></p>
+<h2 id="Revert"><a href="#Revert" class="headerlink" title="Revert"></a>Revert</h2><p>Revert不像Reset回滚特定版本,而是<strong>撤销特定提交的操作</strong>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git revert -n &lt;版本hashID&gt;</span><br><span class="line"><span class="comment">#解决冲突</span></span><br><span class="line">git revert --<span class="built_in">continue</span></span><br><span class="line"><span class="comment">#编辑并保存备注文件</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意Revert指令</strong><br>此处与Rebase指令类似</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(all conflicts fixed: run <span class="string">"git revert --continue"</span>)</span><br><span class="line">(use <span class="string">"git revert --abort"</span> to cancel the revert operation)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reset与Revert的异同"><a href="#Reset与Revert的异同" class="headerlink" title="Reset与Revert的异同"></a>Reset与Revert的异同</h2><p>Reset是<strong>回滚特定版本</strong><br>Revert是<strong>撤销特定提交的操作</strong><br>举个例子:<br>Reset是穿越时空回到过去(你回到了以前的版本,从头再来)<br>Revert是改变过去,影响现在.(你还在当前时空,但是一部分人生污点没了:)</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git"><span class="toc-text">Git</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Reset"><span class="toc-text">Reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Revert"><span class="toc-text">Revert</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reset与Revert的异同"><span class="toc-text">Reset与Revert的异同</span></a></li></ol></li></ol>
+  </div>
+</aside>
   
-    
-    <div class="timeline-item">
-      <time>2019-08-23</time>
-      <a target="_self" href="/passages/2019-08-23-Git_Merge与Rebase/">Git_Merge与Rebase</a>
-    </div>
+    <aside class="passage-copyright">
+      <div>本文作者: 项港华_1094708529@qq.com</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://ezioac.github.io/passages/2019-08-23-Git-Reset与Revert/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
   
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Git/"><i class="fa fa-tags"></i>Git</a>
+     
+      <a href="/tags/工具/"><i class="fa fa-tags"></i>工具</a>
     
-    <div class="timeline-item">
-      <time>2019-08-22</time>
-      <a target="_self" href="/passages/2019-08-22-Git/">Git基础</a>
     </div>
   
 </div>
+
     </main>
     
     <div class="site-footer-wrapper">
@@ -238,12 +285,12 @@
     <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-08-23-Git_Merge与Rebase/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
