@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Ezio Xiang">
+  
+  
+  <title>V2ray | Xiang&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="V2ray,工具,V2ray,科学上网,">
+  
+
+  
+  <meta name="description" content="V2ray搭建过程">
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":false,"count":false},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-08-22 ",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Ezio Xiang",
+    share: {"twitter":false,"facebook":false,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Ezio Xiang</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 瞎写瞎看</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/ezioac/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-08-23
+    </span>
+    
+      <span>
+        | <a href="/categories/V2ray/"><i class="fa fa-bookmark"></i>V2ray</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    V2ray
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="V2ray的搭建过程"><a href="#V2ray的搭建过程" class="headerlink" title="V2ray的搭建过程"></a>V2ray的搭建过程</h1><h2 id="购买VPS"><a href="#购买VPS" class="headerlink" title="购买VPS"></a>购买VPS</h2><p>个人推荐Digital Ocean:<br><a href="https://www.digitalocean.com/" target="_blank" rel="noopener">DO</a></p>
+<p>原因是便宜<del>(穷)</del></p>
+<p><strong>Github学生包里面有DO的50美刀优惠券(学生可以用学校邮箱申请,非学生可以去找万能的某宝某鱼).</strong></p>
+<p>填邀请码额外给$.</p>
+<p>自己要用paypal充10$,最便宜的服务器5$/月,大概算下50RMB左右11个月!</p>
+<h2 id="部署V2ray"><a href="#部署V2ray" class="headerlink" title="部署V2ray"></a>部署V2ray</h2><h3 id="V2ray介绍"><a href="#V2ray介绍" class="headerlink" title="V2ray介绍"></a>V2ray介绍</h3><p>官网：<a href="https://www.v2ray.com" target="_blank" rel="noopener">https://www.v2ray.com</a> <strong>需要科学上网:{</strong><br>Github:<a href="https://github.com/v2ray/v2ray-core" target="_blank" rel="noopener">https://github.com/v2ray/v2ray-core</a></p>
+<h3 id="下载V2ray"><a href="#下载V2ray" class="headerlink" title="下载V2ray"></a>下载V2ray</h3><p>在你的VPS上:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -L -s https://install.direct/go.sh)</span><br></pre></td></tr></table></figure>
+
+<p><strong>需要自行安装curl</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update -y &amp;&amp; apt-get install curl -y  <span class="comment">#ubuntu/debian 系统 </span></span><br><span class="line">yum update -y &amp;&amp; yum install curl -y          <span class="comment">#centos 系统</span></span><br></pre></td></tr></table></figure>
+
+<p>在你的电脑上:</p>
+<p>下载客户端</p>
+<p><a href="https://github.com/v2ray/v2ray-core/releases" target="_blank" rel="noopener">https://github.com/v2ray/v2ray-core/releases</a></p>
+<h3 id="配置V2ray"><a href="#配置V2ray" class="headerlink" title="配置V2ray"></a>配置V2ray</h3><p>修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/v2ray/config.json</span><br></pre></td></tr></table></figure>
+
+<p>内容大致长这样,其实可以不改默认的.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"inbounds"</span>: [&#123;</span><br><span class="line">    <span class="string">"port"</span>: 10086, // 服务器监听端口，必须和客户端的一致 Mark1</span><br><span class="line">    <span class="string">"protocol"</span>: <span class="string">"vmess"</span>,     //协议名 V2ray自己的协议</span><br><span class="line">    <span class="string">"settings"</span>: &#123;</span><br><span class="line">      <span class="string">"clients"</span>: [&#123; <span class="string">"id"</span>: <span class="string">"b831381d-6324-4d53-ad4f-8cda48b30811"</span> &#125;]  //必须和客户端的一致 Mark2</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="string">"outbounds"</span>: [&#123;</span><br><span class="line">    <span class="string">"protocol"</span>: <span class="string">"freedom"</span>,</span><br><span class="line">    <span class="string">"settings"</span>: &#123;&#125;</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改客户端下的config.json</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"inbounds"</span>: [&#123;</span><br><span class="line">    <span class="string">"port"</span>: 1080,  // SOCKS 代理端口，在浏览器中需配置代理并指向这个端口 Mark3</span><br><span class="line">    <span class="string">"listen"</span>: <span class="string">"127.0.0.1"</span>, </span><br><span class="line">    <span class="string">"protocol"</span>: <span class="string">"socks"</span>,</span><br><span class="line">    <span class="string">"settings"</span>: &#123;</span><br><span class="line">      <span class="string">"udp"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="string">"outbounds"</span>: [&#123;</span><br><span class="line">    <span class="string">"protocol"</span>: <span class="string">"vmess"</span>,</span><br><span class="line">    <span class="string">"settings"</span>: &#123;</span><br><span class="line">      <span class="string">"vnext"</span>: [&#123;</span><br><span class="line">        <span class="string">"address"</span>: <span class="string">"server"</span>, // 服务器地址，请修改为你自己的服务器 ip 或域名</span><br><span class="line">        <span class="string">"port"</span>: 10086,  // 服务器端口 此处与Mark1一致</span><br><span class="line">        <span class="string">"users"</span>: [&#123; <span class="string">"id"</span>: <span class="string">"b831381d-6324-4d53-ad4f-8cda48b30811"</span> &#125;]  //此处与Mark2一致</span><br><span class="line">      &#125;]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,&#123;</span><br><span class="line">    <span class="string">"protocol"</span>: <span class="string">"freedom"</span>,</span><br><span class="line">    <span class="string">"tag"</span>: <span class="string">"direct"</span>,</span><br><span class="line">    <span class="string">"settings"</span>: &#123;&#125;</span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="string">"routing"</span>: &#123;</span><br><span class="line">    <span class="string">"domainStrategy"</span>: <span class="string">"IPOnDemand"</span>,</span><br><span class="line">    <span class="string">"rules"</span>: [&#123;</span><br><span class="line">      <span class="string">"type"</span>: <span class="string">"field"</span>,</span><br><span class="line">      <span class="string">"ip"</span>: [<span class="string">"geoip:private"</span>],</span><br><span class="line">      <span class="string">"outboundTag"</span>: <span class="string">"direct"</span></span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>这只是最精简的配置信息,详细配置解构见下连接</strong><br><a href="https://www.v2ray.com/chapter_02/01_overview.html" target="_blank" rel="noopener">详细配置信息</a></p>
+<h3 id="SwitchyOmega下载"><a href="#SwitchyOmega下载" class="headerlink" title="SwitchyOmega下载"></a>SwitchyOmega下载</h3><p>Chrome浏览器拓展插件<br><a href="https://github.com/FelisCatus/SwitchyOmega" target="_blank" rel="noopener">SwitchyOmega下载</a><br>选项-&gt;新建情景模式-&gt;代理服务器</p>
+<table>
+<thead>
+<tr>
+<th align="center">代理协议</th>
+<th align="center">代理地址</th>
+<th align="center">代理端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">SOCKS5</td>
+<td align="center">127.0.0.1</td>
+<td align="center">同windows下配置文件的端口 Mark3</td>
+</tr>
+</tbody></table>
+<p>至此:<br>VPS 服务运行 + 本地V2ray打开 + chrome代理插件开启 = 科学上网</p>
+<h3 id="开启BBR"><a href="#开启BBR" class="headerlink" title="开启BBR"></a>开启BBR</h3><p><strong>它可以让你翻墙速度更快</strong></p>
+<p>BBR是google的TCP阻塞控制算法，可以最大程度的利用带宽，提升网络传输速率。<br>Linux kernel 4.9 及以上已支持 tcp_bbr</p>
+<p>1.<br>查看系统内核版本：<br><code>uname -r</code><br>看内核版本是否大于等于4.9，否则要升级内核，或者安装bbr。</p>
+<p>2.<br>开启BBR：<br><code>echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf</code><br><code>echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf</code></p>
+<p>3.<br>保存生效：<br><code>sysctl -p</code></p>
+<p>4.<br>检查BBR是否启用：<br><code>sysctl net.ipv4.tcp_available_congestion_control</code><br>返回值一般为：<br><code>net.ipv4.tcp_available_congestion_control = reno cubic bbr</code></p>
+<p><code>sysctl net.ipv4.tcp_congestion_control</code><br>返回值一般为：<br><code>net.ipv4.tcp_congestion_control = bbr</code></p>
+<p><code>sysctl net.core.default_qdisc</code><br>返回值一般为：<br><code>net.core.default_qdisc = fq</code></p>
+<p><code>lsmod | grep bbr</code><br>返回值有 tcp_bbr则BBR已启动：<br><code>tcp_bbr  20480  10</code></p>
+<p>感谢@Mr_Bluyee<br><a href="https://www.jianshu.com/p/98c21990ed23" target="_blank" rel="noopener">简书_BBR开启</a></p>
+<h2 id="其他V2ray工具推荐"><a href="#其他V2ray工具推荐" class="headerlink" title="其他V2ray工具推荐"></a>其他V2ray工具推荐</h2><pre><code>1.V2rayN(Win)
+2.V2rayNG(安卓)
+3.苹果也有但是我不知道....</code></pre><h2 id="VPS再利用"><a href="#VPS再利用" class="headerlink" title="VPS再利用"></a>VPS再利用</h2><h3 id="Aria2-Web-UI-Apache"><a href="#Aria2-Web-UI-Apache" class="headerlink" title="Aria2+Web UI+Apache"></a>Aria2+Web UI+Apache</h3><p><a href="https://github.com/aria2/aria2" target="_blank" rel="noopener">Aria2</a><br><a href="https://github.com/ziahamza/webui-aria2" target="_blank" rel="noopener">Aria2 Web UI</a><br>基本上可以实现<strong>离线下载</strong>和<strong>在线点播</strong>(下载地址在apache里面)</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#V2ray的搭建过程"><span class="toc-text">V2ray的搭建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#购买VPS"><span class="toc-text">购买VPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署V2ray"><span class="toc-text">部署V2ray</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#V2ray介绍"><span class="toc-text">V2ray介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下载V2ray"><span class="toc-text">下载V2ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置V2ray"><span class="toc-text">配置V2ray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SwitchyOmega下载"><span class="toc-text">SwitchyOmega下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启BBR"><span class="toc-text">开启BBR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他V2ray工具推荐"><span class="toc-text">其他V2ray工具推荐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VPS再利用"><span class="toc-text">VPS再利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Aria2-Web-UI-Apache"><span class="toc-text">Aria2+Web UI+Apache</span></a></li></ol></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: 项港华_1094708529@qq.com</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://ezioac.github.io/passages/2019-08-23-v2ray/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/工具/"><i class="fa fa-tags"></i>工具</a>
+     
+      <a href="/tags/V2ray/"><i class="fa fa-tags"></i>V2ray</a>
+     
+      <a href="/tags/科学上网/"><i class="fa fa-tags"></i>科学上网</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 1094708529@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <div class="site-layer-input-choose">
+          <a href="javascript:void(0);" title="Change Search Engine">Google</a>
+        </div>
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-08-23-Git_Merge与Rebase/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-08-22-Git/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
