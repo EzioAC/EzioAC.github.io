@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Ezio Xiang">
+  
+  
+  <title>Git_Merge与Rebase | Xiang&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Git,Git,工具,">
+  
+
+  
+  <meta name="description" content="Git Merge语句和Rebase语句的用法和异同">
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":false,"count":false},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-08-22 ",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Ezio Xiang",
+    share: {"twitter":false,"facebook":false,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Ezio Xiang</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 瞎写瞎看</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/ezioac/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-08-23
+    </span>
+    
+      <span>
+        | <a href="/categories/Git/"><i class="fa fa-bookmark"></i>Git</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Git_Merge与Rebase
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h2><p><strong>Merge(合并)</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge &lt;分支名&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当前节点iss001 v1.0-&gt;fixed iss001</span></span><br><span class="line"><span class="comment">#当前主节点master v1.0-&gt;v2.0</span></span><br><span class="line"><span class="comment">#在master操作</span></span><br><span class="line">git merge iss001</span><br><span class="line"><span class="comment">#1.修改文件去重</span></span><br><span class="line"><span class="comment">#2.git add XXX</span></span><br><span class="line"><span class="comment">#3.提交</span></span><br><span class="line">git commit -m <span class="string">"v2.0 with iss001 fixed"</span></span><br><span class="line"><span class="comment">#查看节点历史</span></span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br><span class="line"><span class="comment"># v1.0  -&gt;v2.0          -&gt; v2.0 with iss001 fixed</span></span><br><span class="line"><span class="comment">#       -&gt;fixed iss001</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h2><p><strong>Rebase(变基)</strong></p>
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase &lt;分支名&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意 Rebase语句会进入解决冲突状态,注意语句!</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git rebase --abort <span class="comment">#放弃rebase操作</span></span><br><span class="line">git rebase --skip  <span class="comment">#跳过改提交</span></span><br><span class="line">git rebase --<span class="built_in">continue</span> <span class="comment">#继续rebase操作(可能需要多次解决冲突,不需要用commit指令!!)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当前节点iss001 v1.0-&gt;fixed iss001</span></span><br><span class="line"><span class="comment">#当前主节点master v1.0-&gt;v2.0</span></span><br><span class="line"><span class="comment">#在iss001操作</span></span><br><span class="line">git rebase master</span><br><span class="line"><span class="comment">#1.修改文件去重</span></span><br><span class="line"><span class="comment">#2.git add XXX</span></span><br><span class="line"><span class="comment">#3.继续rebase</span></span><br><span class="line">git rebase --<span class="built_in">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查看节点历史</span></span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br><span class="line"><span class="comment">#当前节点iss001 v1.0-&gt;v2.0-&gt; fixed iss001</span></span><br><span class="line"><span class="comment">#当前主节点master v1.0-&gt;v2.0</span></span><br><span class="line"></span><br><span class="line">git checkout master </span><br><span class="line"><span class="comment">#合并分支(quick-forward)</span></span><br><span class="line">git merge iss001</span><br><span class="line"><span class="comment">#查看节点历史</span></span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br><span class="line"><span class="comment">#当前主节点master v1.0-&gt;v2.0-&gt;fixed iss001</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="合并提交节点"><a href="#合并提交节点" class="headerlink" title="合并提交节点"></a>合并提交节点</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase [-i]  &lt;提交起点&gt; [&lt;提交终点&gt;]</span><br></pre></td></tr></table></figure>
+
+<p>合并节点 -i为交互模式</p>
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当前节点iss001 v1.0-&gt;fix iss001-&gt;fix iss001 again-&gt;fix iss001 again and again!</span></span><br><span class="line"><span class="comment">#(这个逼居然提交了这么多次) :P (太丢人了)</span></span><br><span class="line"><span class="comment">#git log 查看v1.0的HashID</span></span><br><span class="line">git rebase -i &lt;v1.0的hashID&gt;</span><br><span class="line"><span class="comment">#自动打开todo文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pick 326f8ca fix iss001</span></span><br><span class="line"><span class="comment">#pick a492df3 fix iss001 again</span></span><br><span class="line"><span class="comment">#pick 199882e fix iss001 again and again</span></span><br><span class="line"><span class="comment">#改为</span></span><br><span class="line">pick 326f8ca fix iss001</span><br><span class="line">s a492df3 fix iss001 again</span><br><span class="line">s 199882e fix iss001 again and again</span><br><span class="line"><span class="comment">#保存,关闭.</span></span><br><span class="line"><span class="comment">#可能需要解决冲突</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#自动打开注释文件.</span></span><br><span class="line"><span class="comment">#修改,关闭,保存.</span></span><br><span class="line"><span class="comment">#查看历史</span></span><br><span class="line">git <span class="built_in">log</span></span><br><span class="line"><span class="comment">#当前节点iss001 v1.0-&gt;fix iss001 once for all</span></span><br><span class="line"><span class="comment">#(不丢人了!):$</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>更多方式(自己探索~~)</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Commands:</span></span><br><span class="line"><span class="comment"># p, pick &lt;commit&gt; = use commit</span></span><br><span class="line"><span class="comment"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span></span><br><span class="line"><span class="comment"># e, edit &lt;commit&gt; = use commit, but stop for amending</span></span><br><span class="line"><span class="comment"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span></span><br><span class="line"><span class="comment"># f, fixup &lt;commit&gt; = like "squash", but discard this commit's log message</span></span><br><span class="line"><span class="comment"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span></span><br><span class="line"><span class="comment"># b, break = stop here (continue rebase later with 'git rebase --continue')</span></span><br><span class="line"><span class="comment"># d, drop &lt;commit&gt; = remove commit</span></span><br><span class="line"><span class="comment"># l, label &lt;label&gt; = label current HEAD with a name</span></span><br><span class="line"><span class="comment"># t, reset &lt;label&gt; = reset HEAD to a label</span></span><br><span class="line"><span class="comment"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span></span><br><span class="line"><span class="comment"># .       create a merge commit using the original merge commit's</span></span><br><span class="line"><span class="comment"># .       message (or the oneline, if no original merge commit was</span></span><br><span class="line"><span class="comment"># .       specified). Use -c &lt;commit&gt; to reword the commit message.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># These lines can be re-ordered; they are executed from top to bottom.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># If you remove a line here THAT COMMIT WILL BE LOST.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># However, if you remove everything, the rebase will be aborted.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Note that empty commits are commented out</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Merge与Rebase的异同"><a href="#Merge与Rebase的异同" class="headerlink" title="Merge与Rebase的异同"></a>Merge与Rebase的异同</h2><p>同:Merge与Rebase同样能完成合并功能(虽然rebase之后还是要用merge语句:)<br>异:节点历史不同,rebase是一条直线,merge存在分支.<br>异:rebase可以用于整合历史节点.</p>
+<p><strong>Rebase语句比Merge复杂,但是节点历史更加的简单明了(一根葱&gt;分支树)</strong><br><strong>Rebase可以完成整合历史节点等功能</strong></p>
+<p><strong>感谢@jartto和@git-scm</strong><br><a href="http://jartto.wang/2018/12/11/git-rebase/" target="_blank" rel="noopener">彻底搞懂 Git-Rebase</a><br><a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6" target="_blank" rel="noopener">分支的新建与合并</a></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git"><span class="toc-text">Git</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Merge"><span class="toc-text">Merge</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rebase"><span class="toc-text">Rebase</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#合并分支"><span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合并提交节点"><span class="toc-text">合并提交节点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Merge与Rebase的异同"><span class="toc-text">Merge与Rebase的异同</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: 项港华_1094708529@qq.com</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://ezioac.github.io/passages/2019-08-23-Git_Merge与Rebase/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Git/"><i class="fa fa-tags"></i>Git</a>
+     
+      <a href="/tags/工具/"><i class="fa fa-tags"></i>工具</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 1094708529@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <div class="site-layer-input-choose">
+          <a href="javascript:void(0);" title="Change Search Engine">Google</a>
+        </div>
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-08-22-Git/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
