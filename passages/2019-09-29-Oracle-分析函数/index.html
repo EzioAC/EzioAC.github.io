@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Ezio Xiang">
+  
+  
+  <title>Oracle_分析函数 | Xiang&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Oracle,Oracle,分析函数,">
+  
+
+  
+  <meta name="description" content="分析函数">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"fQiC4fqNASY1FR2G6oKnXDiy-gzGzoHsz","appkey":"NGD4CxSdiA7YB7jXw3r4DiqP","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-08-22 ",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Ezio Xiang",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":false,"wechat":false},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Ezio Xiang</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 瞎写瞎看</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/ezioac/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-29
+    </span>
+    
+      <span>
+        | <a href="/categories/Oracle/"><i class="fa fa-bookmark"></i>Oracle</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Oracle_分析函数
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="分析函数入门"><a href="#分析函数入门" class="headerlink" title="分析函数入门"></a>分析函数入门</h1><p>##　分析函数是什么？<br>分析函数是Oracle专门用于解决复杂报表统计需求的功能强大的函数，它可以在数据中进行分组然后计算基于组的某种统计值，并且每一组的每一行都可以返回一个统计值。</p>
+<h2 id="分析函数和聚合函数的不同之处"><a href="#分析函数和聚合函数的不同之处" class="headerlink" title="分析函数和聚合函数的不同之处"></a>分析函数和聚合函数的不同之处</h2><p>分析函数更加灵活:普通的聚合函数必须要与group by语句配合，倘若需要使用多次聚合函数统计数据可能会很冗长。<br>CASE:<br>    求出学生的语数英各科排名情况:</p>
+<p>使用分析函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> stu_name,</span><br><span class="line">math_score,<span class="keyword">rank</span> () <span class="keyword">over</span> (<span class="keyword">order</span> <span class="keyword">by</span> math_score) <span class="keyword">as</span> math_rank</span><br><span class="line">yuwen_score,<span class="keyword">rank</span>() <span class="keyword">over</span> (<span class="keyword">order</span> <span class="keyword">by</span> yuwen_score) <span class="keyword">as</span> yuwen_rank</span><br><span class="line">...</span><br><span class="line"><span class="keyword">FROM</span> Stu_score</span><br></pre></td></tr></table></figure>
+
+<p>使用聚合函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> math_rank <span class="keyword">as</span></span><br><span class="line">(<span class="keyword">SELECT</span> stu_name,math_score,<span class="keyword">rownum</span> <span class="keyword">as</span> math_rank</span><br><span class="line"><span class="keyword">FROM</span> Stu_score</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> math_score <span class="keyword">desc</span>),</span><br><span class="line">yuwen_rank <span class="keyword">as</span></span><br><span class="line">(<span class="keyword">SELECT</span> stu_name,yuwen_score,<span class="keyword">rownum</span> <span class="keyword">as</span> yuwen_rank</span><br><span class="line"><span class="keyword">FROM</span> Stu_score</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> math_score <span class="keyword">desc</span>)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> math.stu_name,math.math_score,yw.yuwen_rank <span class="keyword">from</span> math_rank math,yuwen_rank yw</span><br><span class="line"><span class="keyword">where</span> math.stu_name = yw.stu_name</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析函数语法结构概述"><a href="#分析函数语法结构概述" class="headerlink" title="分析函数语法结构概述"></a>分析函数语法结构概述</h2><p><strong>分析函数名(参数) OVER (PARTITION BY子句 ORDER BY子句 ROWS/RANGE子句)</strong></p>
+<h3 id="常见分析函数"><a href="#常见分析函数" class="headerlink" title="常见分析函数"></a>常见分析函数</h3><p>*号表示常用</p>
+<blockquote>
+<p>AVG *<br>CORR *<br>COUNT *<br>COVAR_POP *<br>COVAR_SAMP *<br>CUME_DIST<br>DENSE_RANK<br>FIRST<br>FIRST_VALUE *<br>LAG<br>LAST<br>LAST_VALUE *<br>LEAD<br>LISTAGG<br>MAX *<br>MIN *<br>NTH_VALUE*<br>NTILE<br>PERCENT_RANK<br>PERCENTILE_CONT<br>PERCENTILE_DISC<br>RANK<br>RATIO_TO_REPORT<br>REGR_ (Linear Regression) Functions *<br>ROW_NUMBER<br>STDDEV *<br>STDDEV_POP *<br>STDDEV_SAMP *<br>SUM *<br>VAR_POP *<br>VAR_SAMP *<br>VARIANCE *</p>
+</blockquote>
+<h3 id="over-开窗函数"><a href="#over-开窗函数" class="headerlink" title="over()开窗函数"></a>over()开窗函数</h3><p>分析子句由如下三部分构成<br>PARTITION BY(分组))：<br> 分组子句，表示分析函数的计算范围，也就是以什么(一般是字段，或者几个字段)分<br> 组，例如PARTITION BY FUNDCODE，表示相同的FUNDCODE是一个组， 不同的FUNDCODE<br> 就是不同的组，如果没有PARTTIION BY子句，那么表示整个数据集的所有行同属于一<br> 个组，也就是整个数据集总共就一个组。PARTITION BY分组后，每个组都是一个独立<br> 的计算单位，各个组之间没有任何关系<br>ORDER BY(排序)：<br> 排序子句，表示分组后，组内的排序方式<br>ROWS/RANGE(范围)：<br> 窗口子句，是在分组(PARTITION BY)后，组内的子分组，也称窗口，此时分析函数的<br> 计算范围是窗口，而不是PARTITON。窗口有两种，ROWS和RANGE。</p>
+<p> <strong>分析子句的各个部分都是可选的，根据所选分析子句的不同，分析函数的结构会有如下几种表现形式</strong></p>
+<p>以下皆可(部分特殊函数强制性使用排序)<br> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">分析函数名(参数) OVER ()                                <span class="comment">--无分组,无排序,所有行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ...)                <span class="comment">--有分组,无排序,分组内所有行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY ...)       <span class="comment">--有分组,有排序,分组内第一行到当前行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY ROWS ...)  <span class="comment">--有分组,有排序,按行的范围选择行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY RANGE ...) <span class="comment">--有分组,有排序,按值的范围选择行</span></span><br></pre></td></tr></table></figure></p>
+<p> <strong>注意第三条的范围</strong></p>
+<h4 id="PARTITION-BY"><a href="#PARTITION-BY" class="headerlink" title="PARTITION BY"></a>PARTITION BY</h4><p>与GROUP BY 同理</p>
+<h4 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h4><p>与ORDER BY 同理</p>
+<h4 id="窗口子句ROWS"><a href="#窗口子句ROWS" class="headerlink" title="窗口子句ROWS"></a>窗口子句ROWS</h4><p>ROWS窗口子句的语法结构有如下两种形式， 开始位置偏移量/开始位置和结束位置偏移量/结束位置确定了窗口的范围。</p>
+<ul>
+<li>ROWS BETWEEN 开始位置偏移量/开始位置 AND 结束位置偏移量/结束位置</li>
+<li>ROWS 开始位置偏移量/开始位置</li>
+</ul>
+<p><em>Note: 如果使用“ROWS 开始位置偏移量/开始位置”结构，那么指定且仅指定了开始位置偏移量/开始位置，此时结束位置默认是CURRENT ROW，等价于ROW BETWEEN 开始位置偏移量/开始位置 ANDCURRENT ROW</em></p>
+<p>开始位置偏移量/开始位置和结束位置偏移量/结束位置的取值有如下5种形式:</p>
+<ul>
+<li><p>整数 PRECEDING PRECEDING是行数偏移量，表示从当前行往上倒退整数行(如：1 PRECEDING)</p>
+</li>
+<li><p>整数 FOLLOWING FOLLOWING是行数偏移量，表示从当前行往下前进整数行(如：2 FOLLOWING)</p>
+</li>
+<li><p>CURRENT ROW 当前行，也就是不加也不减</p>
+</li>
+<li><p>UNBOUNDED PRECEDING 表示按照ORDER BY排序后，PARTITION内的第一行</p>
+</li>
+<li><p>UNBOUNDED FOLLOWING 表示按照ORDER BY排序后，PARTITION内的最后一行</p>
+<h4 id="窗口子句RANGE"><a href="#窗口子句RANGE" class="headerlink" title="窗口子句RANGE"></a>窗口子句RANGE</h4></li>
+</ul>
+<p>RANGE 窗口子句的语法结构有如下两种形式，其中开始值偏移量/开始值和结束值偏移量/结束值确定了窗口的范围。</p>
+<ul>
+<li>RANGE BETWEEN 开始值偏移量/开始值 AND 结束值偏移量/结束值</li>
+<li>RANGE 开始值偏移量/开始值</li>
+</ul>
+<p><em>Note: 如果我们采用“RANGE 开始值偏移量”结构，那么指定且仅指定了开始值偏移量，默认结束值偏移量将会是CURRENT ROW，等价于RANGE BETWEEN 开始值偏移量 AND CURRENT ROW， 这里的CURRENT ROW和ROWS子句的含义完全不同，指的是偏移量为0，或者理解为当前行的值+0，也可以理解为窗口的结束值是当前行的值</em></p>
+<p>开始值偏移量和结束值偏移量的取值有如下5种形式:</p>
+<ul>
+<li>M PRECEDING PRECEDING是偏移量：表示当前行ORDER BY字段的值减M(如：1 PRECEDING)</li>
+<li>N FOLLOWING FOLLOWING是偏移量：表示当前行ORDER BY字段的值加N(如：2 FOLLOWING)</li>
+<li>CURRENT ROW 偏移量为0</li>
+<li>UNBOUNDED PRECEDING 表示按照ORDER BY排序后，PARTITION内的第一行的ORDER BY字段的值</li>
+<li>UNBOUNDED FOLLOWING 表示按照ORDER BY排序后，PARTITION内的最后一行的ORDER BY字段的值</li>
+</ul>
+<h4 id="ROWS与RANGE的区别"><a href="#ROWS与RANGE的区别" class="headerlink" title="ROWS与RANGE的区别"></a>ROWS与RANGE的区别</h4><p><strong>ROWS是根据数据行来进行筛选</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">over(order by score desc rows between 5 PRECEDING and 5 FOLLOWING)))</span><br></pre></td></tr></table></figure>
+
+<p>按成绩排名,某个人的前5名和后5名<br><strong>RANGE是对于排序的值进行筛选</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">over(order by score desc range between 5 PRECEDING and 5 FOLLOWING)))</span><br></pre></td></tr></table></figure>
+
+<p>按成绩排序,(以成绩90分为例)筛选85到95分的所有人</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#分析函数入门"><span class="toc-text">分析函数入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析函数和聚合函数的不同之处"><span class="toc-text">分析函数和聚合函数的不同之处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析函数语法结构概述"><span class="toc-text">分析函数语法结构概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常见分析函数"><span class="toc-text">常见分析函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#over-开窗函数"><span class="toc-text">over()开窗函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PARTITION-BY"><span class="toc-text">PARTITION BY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ORDER-BY"><span class="toc-text">ORDER BY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#窗口子句ROWS"><span class="toc-text">窗口子句ROWS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#窗口子句RANGE"><span class="toc-text">窗口子句RANGE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ROWS与RANGE的区别"><span class="toc-text">ROWS与RANGE的区别</span></a></li></ol></li></ol></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: 项港华_1094708529@qq.com</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://ezioac.github.io/passages/2019-09-29-Oracle-分析函数/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Oracle/"><i class="fa fa-tags"></i>Oracle</a>
+     
+      <a href="/tags/分析函数/"><i class="fa fa-tags"></i>分析函数</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 1094708529@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <div class="site-layer-input-choose">
+          <a href="javascript:void(0);" title="Change Search Engine">Google</a>
+        </div>
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-08-23-Git-Reset与Revert/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
