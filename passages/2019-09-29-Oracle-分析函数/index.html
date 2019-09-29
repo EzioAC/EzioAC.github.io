@@ -190,7 +190,9 @@
 <h3 id="over-开窗函数"><a href="#over-开窗函数" class="headerlink" title="over()开窗函数"></a>over()开窗函数</h3><p>分析子句由如下三部分构成<br>PARTITION BY(分组))：<br> 分组子句，表示分析函数的计算范围，也就是以什么(一般是字段，或者几个字段)分<br> 组，例如PARTITION BY FUNDCODE，表示相同的FUNDCODE是一个组， 不同的FUNDCODE<br> 就是不同的组，如果没有PARTTIION BY子句，那么表示整个数据集的所有行同属于一<br> 个组，也就是整个数据集总共就一个组。PARTITION BY分组后，每个组都是一个独立<br> 的计算单位，各个组之间没有任何关系<br>ORDER BY(排序)：<br> 排序子句，表示分组后，组内的排序方式<br>ROWS/RANGE(范围)：<br> 窗口子句，是在分组(PARTITION BY)后，组内的子分组，也称窗口，此时分析函数的<br> 计算范围是窗口，而不是PARTITON。窗口有两种，ROWS和RANGE。</p>
 <p> <strong>分析子句的各个部分都是可选的，根据所选分析子句的不同，分析函数的结构会有如下几种表现形式</strong></p>
 <p>以下皆可(部分特殊函数强制性使用排序)<br> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">分析函数名(参数) OVER ()                                <span class="comment">--无分组,无排序,所有行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ...)                <span class="comment">--有分组,无排序,分组内所有行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY ...)       <span class="comment">--有分组,有排序,分组内第一行到当前行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY ROWS ...)  <span class="comment">--有分组,有排序,按行的范围选择行</span></span><br><span class="line">分析函数名(参数) OVER (PARTITION BY ORDER BY RANGE ...) <span class="comment">--有分组,有排序,按值的范围选择行</span></span><br></pre></td></tr></table></figure></p>
-<p> <strong>注意第三条的范围</strong></p>
+<blockquote>
+<p>注意第三条的范围</p>
+</blockquote>
 <h4 id="PARTITION-BY"><a href="#PARTITION-BY" class="headerlink" title="PARTITION BY"></a>PARTITION BY</h4><p>与GROUP BY 同理</p>
 <h4 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h4><p>与ORDER BY 同理</p>
 <h4 id="窗口子句ROWS"><a href="#窗口子句ROWS" class="headerlink" title="窗口子句ROWS"></a>窗口子句ROWS</h4><p>ROWS窗口子句的语法结构有如下两种形式， 开始位置偏移量/开始位置和结束位置偏移量/结束位置确定了窗口的范围。</p>
@@ -198,7 +200,9 @@
 <li>ROWS BETWEEN 开始位置偏移量/开始位置 AND 结束位置偏移量/结束位置</li>
 <li>ROWS 开始位置偏移量/开始位置</li>
 </ul>
-<p><em>Note: 如果使用“ROWS 开始位置偏移量/开始位置”结构，那么指定且仅指定了开始位置偏移量/开始位置，此时结束位置默认是CURRENT ROW，等价于ROW BETWEEN 开始位置偏移量/开始位置 ANDCURRENT ROW</em></p>
+<blockquote>
+<p>Note: 如果使用“ROWS 开始位置偏移量/开始位置”结构，那么指定且仅指定了开始位置偏移量/开始位置，此时结束位置默认是CURRENT ROW，等价于ROW BETWEEN 开始位置偏移量/开始位置 ANDCURRENT ROW*</p>
+</blockquote>
 <p>开始位置偏移量/开始位置和结束位置偏移量/结束位置的取值有如下5种形式:</p>
 <ul>
 <li><p>整数 PRECEDING PRECEDING是行数偏移量，表示从当前行往上倒退整数行(如：1 PRECEDING)</p>
@@ -217,7 +221,9 @@
 <li>RANGE BETWEEN 开始值偏移量/开始值 AND 结束值偏移量/结束值</li>
 <li>RANGE 开始值偏移量/开始值</li>
 </ul>
-<p><em>Note: 如果我们采用“RANGE 开始值偏移量”结构，那么指定且仅指定了开始值偏移量，默认结束值偏移量将会是CURRENT ROW，等价于RANGE BETWEEN 开始值偏移量 AND CURRENT ROW， 这里的CURRENT ROW和ROWS子句的含义完全不同，指的是偏移量为0，或者理解为当前行的值+0，也可以理解为窗口的结束值是当前行的值</em></p>
+<blockquote>
+<p>Note: 如果我们采用“RANGE 开始值偏移量”结构，那么指定且仅指定了开始值偏移量，默认结束值偏移量将会是CURRENT ROW，等价于RANGE BETWEEN 开始值偏移量 AND CURRENT ROW， 这里的CURRENT ROW和ROWS子句的含义完全不同，指的是偏移量为0，或者理解为当前行的值+0，也可以理解为窗口的结束值是当前行的值</p>
+</blockquote>
 <p>开始值偏移量和结束值偏移量的取值有如下5种形式:</p>
 <ul>
 <li>M PRECEDING PRECEDING是偏移量：表示当前行ORDER BY字段的值减M(如：1 PRECEDING)</li>
